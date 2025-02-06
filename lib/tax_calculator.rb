@@ -38,7 +38,7 @@ class TaxCalculator
     taxed_transaction
   end
 
-  def self.apply_tax(transaction, is_exportable)
+  def self.apply_tax(transaction, is_exportable:)
     buyer_country = transaction[:buyer_country]
     buyer_type = transaction[:buyer_type]
 
