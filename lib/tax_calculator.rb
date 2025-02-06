@@ -31,7 +31,7 @@ class TaxCalculator
     transaction
   end
 
-  def self.apply_goods_tax(transaction)
+  def self.apply_tax(transaction, is_exportable)
     buyer_country = transaction[:buyer_country]
     buyer_type = transaction[:buyer_type]
 
@@ -46,26 +46,16 @@ class TaxCalculator
       end
     else
       transaction[:tax_rate] = 0
-      transaction[:transaction_type] << 'export'
+      transaction[:transaction_type] << 'export' if is_exportable
     end
   end
 
-  def self.apply_digital_services_tax(transaction)
-    buyer_country = transaction[:buyer_country]
-    buyer_type = transaction[:buyer_type]
+  def self.apply_goods_tax(transaction)
+    apply_tax(transaction, is_exportable: true)
+  end
 
-    if buyer_country == 'ES'
-      transaction[:tax_rate] = SPAIN_VAT
-    elsif EU_COUNTRIES_VAT_RATES.key?(buyer_country)
-      if buyer_type == :individual
-        transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[buyer_country]
-      elsif buyer_type == :company
-        transaction[:tax_rate] = 0
-        transaction[:type] << 'reverse charge'
-      end
-    else
-      transaction[:tax_rate] = 0
-    end
+  def self.apply_digital_services_tax(transaction)
+    apply_tax(transaction, is_exportable: false)
   end
 
   def self.apply_onsite_services_tax(transaction)
