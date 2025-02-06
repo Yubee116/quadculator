@@ -50,7 +50,23 @@ class TaxCalculator
     end
   end
 
-  def self.apply_digital_services_tax(transaction); end
+  def self.apply_digital_services_tax(transaction)
+    buyer_country = transaction[:buyer_country]
+    buyer_type = transaction[:buyer_type]
+
+    if buyer_country == 'ES'
+      transaction[:tax_rate] = SPAIN_VAT
+    elsif EU_COUNTRIES_VAT_RATES.key?(buyer_country)
+      if buyer_type == :individual
+        transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[buyer_country]
+      elsif buyer_type == :company
+        transaction[:tax_rate] = 0
+        transaction[:type] << 'reverse charge'
+      end
+    else
+      transaction[:tax_rate] = 0
+    end
+  end
 
   def self.apply_onsite_services_tax(transaction)
     # raise error if service_location outside EU
