@@ -33,5 +33,8 @@ class TaxCalculator
 
   def self.apply_goods_tax(transaction); end
   def self.apply_digital_services_tax(transaction); end
-  def self.apply_onsite_services_tax(transaction); end
+
+  def self.apply_onsite_services_tax(transaction)
+    transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[service_location] || 0
+  end
 end
