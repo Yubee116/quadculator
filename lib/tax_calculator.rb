@@ -22,18 +22,20 @@ class TaxCalculator
     # Check if transaction is both onsite and digital
     raise 'Invalid transaction: A transaction cannot be both onsite and digital.' if is_digital && is_onsite
 
+    taxed_transaction = transaction.dup
+
     if is_good
-      apply_goods_tax(transaction)
+      apply_goods_tax(taxed_transaction)
     elsif is_service
       if is_digital
-        apply_digital_services_tax(transaction)
+        apply_digital_services_tax(taxed_transaction)
       elsif is_onsite
-        apply_onsite_services_tax(transaction)
+        apply_onsite_services_tax(taxed_transaction)
       end
     else
       raise 'Invalid transaction type'
     end
-    transaction
+    taxed_transaction
   end
 
   def self.apply_tax(transaction, is_exportable)
