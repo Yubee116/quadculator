@@ -10,21 +10,20 @@ class TaxCalculator
 
   SPAIN_VAT = 0.21 # 21%
 
-  # considerations:
-  # transaction_type: physical, good
-  #                   service: digital, onsite
-  # buyer_country: Spain, EU
-  #                Non-EU
-  # buyer_type: individual, company
-  # service_location
-
   def self.calculate_tax(transaction)
-    if transaction[:transaction_type].include?('good')
+    is_good = transaction[:transaction_type].include?('good')
+    is_service = transaction[:transaction_type].include?('service')
+    is_digital = transaction[:transaction_type].include?('digital')
+    is_onsite = transaction[:transaction_type].include?('onsite')
+
+    if is_good
       apply_goods_tax(transaction)
-    elsif transaction[:transaction_type].include?('service') && transaction[:transaction_type].include?('digital')
-      apply_digital_services_tax(transaction)
-    elsif transaction[:transaction_type].include?('service') && transaction[:transaction_type].include?('onsite')
-      apply_onsite_services_tax(transaction)
+    elsif is_service
+      if is_digital
+        apply_digital_services_tax(transaction)
+      elsif is_onsite
+        apply_onsite_services_tax(transaction)
+      end
     else
       raise 'Invalid transaction type'
     end
