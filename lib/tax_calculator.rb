@@ -53,6 +53,11 @@ class TaxCalculator
   def self.apply_digital_services_tax(transaction); end
 
   def self.apply_onsite_services_tax(transaction)
-    transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[service_location] || 0
+    # raise error if service_location outside EU
+    unless EU_COUNTRIES_VAT_RATES.key?(transaction[:service_location])
+      raise "Invalid service location: #{transaction[:service_location]}"
+    end
+
+    transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[transaction[:service_location]]
   end
 end
