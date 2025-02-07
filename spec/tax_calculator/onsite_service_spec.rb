@@ -17,7 +17,7 @@ describe 'Sale of  Onsite Services Tests' do
                                                                    (EU_COUNTRIES.include?(country) ? '(In EU)' : '(Outside EU)')
                                                                  end}" do
           let(:buyer_type) { buyer_type }
-          let(:buyer_type) { country }
+          let(:buyer_country) { country }
 
           it 'applies Spanish VAT' do
             expect(TaxCalculator.calculate_tax(transaction)[:tax_rate]).to eq(0.21)
@@ -36,7 +36,7 @@ describe 'Sale of  Onsite Services Tests' do
                                                                    (EU_COUNTRIES.include?(country) ? '(In EU)' : '(Outside EU)')
                                                                  end}" do
           let(:buyer_type) { buyer_type }
-          let(:buyer_type) { country }
+          let(:buyer_country) { country }
 
           it 'applies Croatian VAT' do
             expect(TaxCalculator.calculate_tax(transaction)[:tax_rate]).to eq(0.25)
