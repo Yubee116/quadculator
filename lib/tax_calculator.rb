@@ -29,7 +29,7 @@ class TaxCalculator
       end
     end
 
-    taxed_transaction
+    ensure_consistent_response(taxed_transaction)
   end
 
   class << self
@@ -82,6 +82,12 @@ class TaxCalculator
 
       # check buyer type is valid
       raise 'Invalid transaction: Unknown buyer type.' unless VALID_BUYER_TYPES.include?(transaction[:buyer_type])
+    end
+
+    def ensure_consistent_response(transaction)
+      transaction[:transaction_type] = Array(transaction[:transaction_type]).uniq
+      transaction[:tax_rate] ||= 0
+      transaction
     end
   end
 end
