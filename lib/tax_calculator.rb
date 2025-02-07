@@ -16,6 +16,9 @@ class TaxCalculator
     # Check if transaction is both a good and a service
     raise 'Invalid transaction: A transaction cannot be both a good and a service.' if is_good && is_service
 
+    # Check if transaction is neither a good nor a service
+    raise 'Invalid transaction: A transaction must be a good or a service.' if !is_good && !is_service
+
     # Check if transaction is both onsite and digital
     raise 'Invalid transaction: A transaction cannot be both onsite and digital.' if is_digital && is_onsite
 

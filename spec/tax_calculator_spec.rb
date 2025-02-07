@@ -27,6 +27,15 @@ describe 'Invalid Transactions Tests' do
     end
   end
 
+  context 'When transaction type is neither good nor service' do
+    let(:transaction) { { transaction_type: %w[digital some-value], buyer_country: 'EL', buyer_type: :individual } }
+    it 'raises an error' do
+      expect do
+        TaxCalculator.calculate_tax(transaction)
+      end.to raise_error('Invalid transaction: A transaction must be a good or a service.')
+    end
+  end
+
   context 'When transaction type is both onsite and digital' do
     let(:transaction) { { transaction_type: %w[service digital onsite], buyer_country: 'BG', buyer_type: :company } }
     it 'raises an error' do
