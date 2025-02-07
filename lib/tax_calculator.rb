@@ -10,7 +10,12 @@ class TaxCalculator
 
   SPAIN_VAT = 0.21 # 21%
 
+  VALID_BUYER_TYPES = %i[individual company].freeze
+  VALID_TRANSACTION_TYPES = %w[good service digital onsite].freeze
+
   def self.calculate_tax(transaction)
+    validate_transaction(transaction)
+
     is_good = transaction[:transaction_type].include?('good')
     is_service = transaction[:transaction_type].include?('service')
     is_digital = transaction[:transaction_type].include?('digital')
@@ -32,9 +37,8 @@ class TaxCalculator
       elsif is_onsite
         apply_onsite_services_tax(taxed_transaction)
       end
-    else
-      raise 'Invalid transaction type'
     end
+
     taxed_transaction
   end
 
@@ -66,6 +70,26 @@ class TaxCalculator
   end
 
   def self.apply_onsite_services_tax(transaction)
-    transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[transaction[:service_location]] || 0
+    service_location = transaction[:service_location]
+    raise 'Invalid transaction: Onsite service must have a service location.' if service_location.nil?
+
+    transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[service_location] || 0
+  end
+
+  def self.validate_transaction(transaction)
+    # check required fields
+    required_keys = %i[transaction_type buyer_country buyer_type]
+    missing_keys = required_keys.reject { |key| transaction.key?(key) }
+    raise "Invalid transaction: Missing required fields - #{missing_keys.join(', ')}." unless missing_keys.empty?
+
+    # check transaction_type is array and elements are valid
+    unless transaction[:transaction_type].is_a?(Array) && transaction[:transaction_type].all? do |t|
+      VALID_TRANSACTION_TYPES.include?(t)
+    end
+      raise 'Invalid transaction: Unknown transaction type.'
+    end
+
+    # check buyer type is valid
+    raise 'Invalid transaction: Unknown buyer type.' unless VALID_BUYER_TYPES.include?(transaction[:buyer_type])
   end
 end
