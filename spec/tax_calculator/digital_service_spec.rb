@@ -1,7 +1,7 @@
 describe 'Sale of  Digital Services Tests' do
   include_context 'transaction setup'
 
-  context 'When transaction is a digital service' do
+  context 'When transaction is a Digital Service' do
     let(:transaction_type) { %w[service digital] }
 
     context 'and buyer is an Individual' do

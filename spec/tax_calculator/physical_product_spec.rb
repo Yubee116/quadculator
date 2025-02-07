@@ -1,7 +1,7 @@
 describe 'Sale of Physical Products Tests' do
   include_context 'transaction setup'
 
-  context 'When sale is a physical product' do
+  context 'When transaction is a Physical Product' do
     let(:transaction_type) { ['good'] }
 
     context 'and buyer is an Individual' do
