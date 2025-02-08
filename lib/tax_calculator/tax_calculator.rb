@@ -1,10 +1,10 @@
 require 'set'
 require_relative 'validators/transaction_validator'
-require_relative '../config/tax_constants'
+require_relative '../../config/tax_calculator_constants'
 
 class TaxCalculator
   extend TaxCalculatorConstants
-  include TransactionValidator # Include the validator methods
+  extend TransactionValidator # Include the validator methods
 
   def self.calculate_tax(transaction)
     validate_transaction(transaction) # Ensure transaction is valid
@@ -13,12 +13,11 @@ class TaxCalculator
     transaction_copy = transaction.dup
     transaction_copy[:transaction_type] = Set.new(transaction[:transaction_type])
 
-    case transaction_copy[:transaction_type]
-    when transaction_copy[:transaction_type].include?('good')
+    if transaction_copy[:transaction_type].include?('good')
       apply_goods_tax(transaction_copy)
-    when transaction_copy[:transaction_type].include?('digital')
+    elsif transaction_copy[:transaction_type].include?('digital')
       apply_digital_services_tax(transaction_copy)
-    when transaction_copy[:transaction_type].include?('onsite')
+    elsif transaction_copy[:transaction_type].include?('onsite')
       apply_onsite_services_tax(transaction_copy)
     else
       raise 'Invalid transaction: Unknown transaction type.'

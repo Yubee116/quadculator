@@ -1,8 +1,8 @@
 require 'set'
-require_relative '../../config/tax_constants'
+require_relative '../../../config/tax_calculator_constants'
 
 module TransactionValidator
-  include TaxConstants
+  include TaxCalculatorConstants
 
   def validate_transaction(transaction)
     transaction[:transaction_type] = Set.new(transaction[:transaction_type])
@@ -29,7 +29,7 @@ module TransactionValidator
   def validate_good_or_service(transaction)
     return if transaction[:transaction_type].intersect?(Set['good', 'service'])
 
-    raise 'Invalid transaction: A transaction must be either a good or a service.'
+    raise 'Invalid transaction: A transaction must be a good or a service.'
   end
 
   def validate_transaction_type_constraints(transaction)
