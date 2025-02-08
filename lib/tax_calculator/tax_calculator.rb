@@ -6,7 +6,6 @@ require_relative '../../config/tax_calculator_constants'
 class TaxCalculator
   extend TaxCalculatorConstants
   extend TransactionValidator # Include the validator methods
-  extend TaxHelper 
 
   def self.calculate_tax(transaction)
     validate_transaction(transaction) # Ensure transaction is valid
@@ -30,11 +29,11 @@ class TaxCalculator
 
   class << self
     def apply_goods_tax(transaction)
-      apply_tax(transaction, is_exportable: true)
+      TaxHelper.apply_tax(transaction, is_exportable: true)
     end
 
     def apply_digital_services_tax(transaction)
-      apply_tax(transaction, is_exportable: false)
+      TaxHelper.apply_tax(transaction, is_exportable: false)
     end
 
     def apply_onsite_services_tax(transaction)

@@ -2,6 +2,7 @@ require_relative '../../../config/tax_calculator_constants'
 
 module TaxHelper
   include TaxCalculatorConstants
+  module_function
 
   def apply_tax(transaction, is_exportable:)
     buyer_country = transaction[:buyer_country]
