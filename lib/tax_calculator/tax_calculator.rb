@@ -1,10 +1,12 @@
 require 'set'
 require_relative 'validators/transaction_validator'
+require_relative 'helpers/tax_helper'
 require_relative '../../config/tax_calculator_constants'
 
 class TaxCalculator
   extend TaxCalculatorConstants
   extend TransactionValidator # Include the validator methods
+  extend TaxHelper 
 
   def self.calculate_tax(transaction)
     validate_transaction(transaction) # Ensure transaction is valid
@@ -27,25 +29,6 @@ class TaxCalculator
   end
 
   class << self
-    def apply_tax(transaction, is_exportable:)
-      buyer_country = transaction[:buyer_country]
-      buyer_type = transaction[:buyer_type]
-
-      if buyer_country == 'ES'
-        transaction[:tax_rate] = SPAIN_VAT
-      elsif EU_COUNTRIES_VAT_RATES.key?(buyer_country)
-        if buyer_type == :individual
-          transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[buyer_country]
-        elsif buyer_type == :company
-          transaction[:tax_rate] = 0
-          transaction[:transaction_type].add('reverse charge')
-        end
-      else
-        transaction[:tax_rate] = 0
-        transaction[:transaction_type].add('export') if is_exportable
-      end
-    end
-
     def apply_goods_tax(transaction)
       apply_tax(transaction, is_exportable: true)
     end
