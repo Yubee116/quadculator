@@ -27,9 +27,9 @@ module TransactionValidator
   end
 
   def validate_good_or_service(transaction)
-    return if transaction[:transaction_type].intersect?(Set['good', 'service'])
-
-    raise 'Invalid transaction: A transaction must be a good or a service.'
+    unless transaction[:transaction_type].intersect?(Set['good', 'service'])
+      raise 'Invalid transaction: A transaction must be a good or a service.'
+    end
   end
 
   def validate_transaction_type_constraints(transaction)
@@ -37,8 +37,8 @@ module TransactionValidator
       raise 'Invalid transaction: A transaction cannot be both a good and a service.'
     end
 
-    return unless transaction[:transaction_type].superset?(Set['digital', 'onsite'])
-
-    raise 'Invalid transaction: A transaction cannot be both onsite and digital.'
+    if transaction[:transaction_type].superset?(Set['digital', 'onsite'])
+      raise 'Invalid transaction: A transaction cannot be both onsite and digital.'
+    end
   end
 end
