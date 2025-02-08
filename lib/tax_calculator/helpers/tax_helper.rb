@@ -10,12 +10,8 @@ module TaxHelper
     if buyer_country == 'ES'
       transaction[:tax_rate] = SPAIN_VAT
     elsif EU_COUNTRIES_VAT_RATES.key?(buyer_country)
-      if buyer_type == :individual
-        transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[buyer_country]
-      elsif buyer_type == :company
-        transaction[:tax_rate] = 0
-        transaction[:transaction_type].add('reverse charge')
-      end
+      transaction[:tax_rate] = (buyer_type == :individual) ? EU_COUNTRIES_VAT_RATES[buyer_country] : 0
+      transaction[:transaction_type].add('reverse charge') if buyer_type == :company
     else
       transaction[:tax_rate] = 0
       transaction[:transaction_type].add('export') if is_exportable
