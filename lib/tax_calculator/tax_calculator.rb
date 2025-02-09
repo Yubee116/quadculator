@@ -1,7 +1,8 @@
 require 'set'
 require_relative 'validators/transaction_validator'
-require_relative 'helpers/tax_helper'
-require_relative '../../config/tax_calculator_constants'
+require_relative 'strategies/goods_tax_strategy'
+require_relative 'strategies/digital_services_tax_strategy'
+require_relative 'strategies/onsite_services_tax_strategy'
 
 class TaxCalculator
   extend TaxCalculatorConstants
@@ -15,29 +16,15 @@ class TaxCalculator
     transaction_copy[:transaction_type] = Set.new(transaction[:transaction_type])
 
     if transaction_copy[:transaction_type].include?('good')
-      apply_goods_tax(transaction_copy)
+      GoodsTaxStrategy.apply_tax(transaction_copy)
     elsif transaction_copy[:transaction_type].include?('digital')
-      apply_digital_services_tax(transaction_copy)
+      DigitalServicesTaxStrategy.apply_tax(transaction_copy)
     elsif transaction_copy[:transaction_type].include?('onsite')
-      apply_onsite_services_tax(transaction_copy)
+      OnsiteServicesTaxStrategy.apply_tax(transaction_copy)
     else
       raise 'Invalid transaction: Unknown transaction type.'
     end
 
     transaction_copy
-  end
-
-  class << self
-    def apply_goods_tax(transaction)
-      TaxHelper.apply_tax(transaction, is_exportable: true)
-    end
-
-    def apply_digital_services_tax(transaction)
-      TaxHelper.apply_tax(transaction, is_exportable: false)
-    end
-
-    def apply_onsite_services_tax(transaction)
-      transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[transaction[:service_location]] || 0
-    end
   end
 end
