@@ -5,11 +5,9 @@ require_relative 'strategies/digital_services_tax_strategy'
 require_relative 'strategies/onsite_services_tax_strategy'
 
 class TaxCalculator
-  extend TaxCalculatorConstants
-  extend TransactionValidator # Include the validator methods
 
   def self.calculate_tax(transaction)
-    validate_transaction(transaction) # Ensure transaction is valid
+    TransactionValidator.validate_transaction(transaction) # Ensure transaction is valid
 
     # Duplicate transaction to prevent modifications to the original
     transaction_copy = transaction.dup
