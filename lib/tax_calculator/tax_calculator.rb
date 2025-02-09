@@ -37,10 +37,7 @@ class TaxCalculator
     end
 
     def apply_onsite_services_tax(transaction)
-      service_location = transaction[:service_location]
-      raise 'Invalid transaction: Onsite service must have a service location.' if service_location.nil?
-
-      transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[service_location] || 0
+      transaction[:tax_rate] = EU_COUNTRIES_VAT_RATES[transaction[:service_location]] || 0
     end
   end
 end

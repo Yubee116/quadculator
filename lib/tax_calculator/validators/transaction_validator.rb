@@ -10,6 +10,7 @@ module TransactionValidator
     validate_transaction_fields(transaction)
     validate_good_or_service(transaction)
     validate_transaction_type_constraints(transaction)
+    validate_onsite_service_location(transaction) 
   end
 
   private
@@ -39,6 +40,12 @@ module TransactionValidator
 
     if transaction[:transaction_type].superset?(Set['digital', 'onsite'])
       raise 'Invalid transaction: A transaction cannot be both onsite and digital.'
+    end
+  end
+
+  def validate_onsite_service_location(transaction)
+    if transaction[:transaction_type].include?('onsite') && transaction[:service_location].nil?
+      raise 'Invalid transaction: Onsite service must have a service location.'
     end
   end
 end
