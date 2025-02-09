@@ -7,7 +7,7 @@ module TaxCalculatorConstants
     'PL' => 0.23, 'PT' => 0.23, 'RO' => 0.19, 'SK' => 0.23, 'SI' => 0.22, 'ES' => 0.21, 'SE' => 0.25
   }.freeze
 
-  SPAIN_VAT = 0.21 # 21%
+  SPAIN_VAT = EU_COUNTRIES_VAT_RATES['ES'].freeze
 
   VALID_BUYER_TYPES = Set.new(%i[individual company]).freeze
   VALID_TRANSACTION_TYPES = Set.new(%w[good service digital onsite]).freeze
