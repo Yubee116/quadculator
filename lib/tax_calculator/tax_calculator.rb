@@ -20,8 +20,6 @@ class TaxCalculator
       DigitalServicesTaxStrategy.apply_tax(transaction_copy)
     elsif transaction_copy[:transaction_type].include?('onsite')
       OnsiteServicesTaxStrategy.apply_tax(transaction_copy)
-    else
-      raise 'Invalid transaction: Unknown transaction type.'
     end
 
     transaction_copy
