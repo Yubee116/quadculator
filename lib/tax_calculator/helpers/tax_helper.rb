@@ -1,8 +1,8 @@
-require_relative '../../../config/tax_calculator_constants'
-
 module TaxHelper
-  include TaxCalculatorConstants
   module_function
+
+  SPAIN_VAT = TaxCalculatorConstants::SPAIN_VAT
+  EU_COUNTRIES_VAT_RATES = TaxCalculatorConstants::EU_COUNTRIES_VAT_RATES
 
   def apply_tax(transaction, is_exportable:)
     buyer_country = transaction[:buyer_country]

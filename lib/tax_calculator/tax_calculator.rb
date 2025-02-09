@@ -1,4 +1,5 @@
 require 'set'
+require_relative '../../config/tax_calculator_constants'
 require_relative 'validators/transaction_validator'
 require_relative 'strategies/goods_tax_strategy'
 require_relative 'strategies/digital_services_tax_strategy'

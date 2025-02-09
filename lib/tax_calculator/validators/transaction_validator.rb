@@ -1,5 +1,4 @@
 require 'set'
-require_relative '../../../config/tax_calculator_constants'
 
 module TransactionValidator
 
