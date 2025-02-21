@@ -9,6 +9,6 @@ module TaxCalculatorConstants
 
   SPAIN_VAT = EU_COUNTRIES_VAT_RATES['ES'].freeze
 
-  VALID_BUYER_TYPES = Set.new(%i[individual company]).freeze
-  VALID_TRANSACTION_TYPES = Set.new(%w[good service digital onsite]).freeze
+  VALID_BUYER_TYPES = Set[:individual, :company].freeze
+  VALID_TRANSACTION_TYPES = Set['good', 'service', 'digital', 'onsite'].freeze
 end
