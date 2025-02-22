@@ -1,9 +1,7 @@
 module TransactionValidator
 
   def self.validate_transaction(transaction)
-    transaction[:transaction_type] = Set.new(transaction[:transaction_type])
-
-    validate_transaction_fields(transaction)
+    validate_transaction_and_fields(transaction)
     validate_good_or_service(transaction)
     validate_transaction_type_constraints(transaction)
     validate_onsite_service_location(transaction) 
@@ -12,7 +10,9 @@ module TransactionValidator
   class << self
     private
 
-    def validate_transaction_fields(transaction)
+    def validate_transaction_and_fields(transaction)
+      raise "Invalid transaction: Expected a Hash, got #{transaction.class}" unless transaction.is_a?(Hash)
+      
       required_keys = Set[:transaction_type, :buyer_country, :buyer_type]
       missing_keys = required_keys - transaction.keys
       raise "Invalid transaction: Missing required fields - #{missing_keys.to_a.join(', ')}." unless missing_keys.empty?

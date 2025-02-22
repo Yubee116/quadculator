@@ -1,4 +1,13 @@
 describe 'Invalid Transactions Tests' do
+  context 'When transaction is non-hash' do
+    let(:transaction) { 'some-string' }
+    it 'raises an error' do
+      expect do
+        TaxCalculator.calculate_tax(transaction)
+      end.to raise_error(RuntimeError, include('Invalid transaction: Expected a Hash'))
+    end
+  end
+  
   context 'When transaction is missing required fields' do
     let(:transaction) { {} }
     it 'raises an error' do
