@@ -1,5 +1,3 @@
-require 'set'
-
 module TransactionValidator
 
   def self.validate_transaction(transaction)
@@ -20,12 +18,9 @@ module TransactionValidator
       raise "Invalid transaction: Missing required fields - #{missing_keys.to_a.join(', ')}." unless missing_keys.empty?
 
       valid_transaction_types = TaxCalculatorConstants::VALID_TRANSACTION_TYPES
-      valid_buyer_types = TaxCalculatorConstants::VALID_BUYER_TYPES
+      raise 'Invalid transaction: Unknown transaction type.' unless transaction[:transaction_type].intersect?(valid_transaction_types)
       
-      unless (transaction[:transaction_type] & valid_transaction_types).any?
-        raise 'Invalid transaction: Unknown transaction type.'
-      end
-
+      valid_buyer_types = TaxCalculatorConstants::VALID_BUYER_TYPES
       raise 'Invalid transaction: Unknown buyer type.' unless valid_buyer_types.include?(transaction[:buyer_type])
     end
 
