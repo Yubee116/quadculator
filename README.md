@@ -1,5 +1,5 @@
 # Overview
-This implements a Tax calculator in Ruby based on some requirements. Test library is [RSPec](https://rspec.info/) with [Simplecov](https://github.com/simplecov-ruby/simplecov) for coverage analysis.
+This implements a Tax calculator in Ruby, designed to process transactions and determine applicable taxes based on predefined business rules. It is intended to integrate with an online sales platform, ensuring accurate tax calculations based on transaction details. Test library is [RSPec](https://rspec.info/) with [Simplecov](https://github.com/simplecov-ruby/simplecov) for coverage analysis.
 
 <br>
 
